@@ -22,38 +22,33 @@ document.getElementById("applyButton").addEventListener("click", () => {
   outputDiv.innerHTML = ""; // Очищаем перед добавлением новых букв
 
   inputText.split("").forEach((char, index) => {
-    const letterElement = createLetterElement(char, index);
+    const letterElement = document.createElement("span");
+    letterElement.textContent = char;
+    letterElement.classList.add("letter");
+    letterElement.setAttribute("data-index", index);
+
+    letterElement.addEventListener("click", () =>
+      handleLetterClick(letterElement)
+    );
+
+    letterElement.setAttribute("draggable", "true");
+    letterElement.addEventListener("dragstart", (e) => {
+      // Если элемент не выделен, выбираем его
+      if (!selectedLetters.includes(letterElement)) {
+        handleLetterClick(letterElement);
+      }
+
+      // Устанавливаем данные для перетаскивания
+      e.dataTransfer.setData(
+        "text/plain",
+        JSON.stringify(selectedLetters.map((letter) => letter.textContent))
+      );
+      e.dataTransfer.effectAllowed = "move";
+    });
+
     outputDiv.appendChild(letterElement);
   });
 });
-
-function createLetterElement(char, index) {
-  const letterElement = document.createElement("span");
-  letterElement.textContent = char;
-  letterElement.classList.add("letter");
-  letterElement.setAttribute("data-index", index);
-  letterElement.setAttribute("draggable", "true");
-
-  letterElement.addEventListener("click", () =>
-    handleLetterClick(letterElement)
-  );
-
-  letterElement.addEventListener("dragstart", (e) => {
-    // Если элемент не выделен, выбираем его
-    if (!selectedLetters.includes(letterElement)) {
-      handleLetterClick(letterElement);
-    }
-
-    // Устанавливаем данные для перетаскивания
-    e.dataTransfer.setData(
-      "text/plain",
-      JSON.stringify(selectedLetters.map((letter) => letter.textContent))
-    );
-    e.dataTransfer.effectAllowed = "move";
-  });
-
-  return letterElement;
-}
 
 function handleLetterClick(letterElement) {
   if (letterElement.classList.contains("selected")) {
@@ -96,7 +91,7 @@ document.addEventListener("drop", (e) => {
   const outputDiv = document.getElementById("output");
   const isInsideOutputDiv = outputDiv.contains(e.target);
 
-  if (overlappingLetter && isInsideOutputDiv) {
+  if (overlappingLetter) {
     // Если есть буква в месте сброса
     const overlappingIndex = overlappingLetter.getAttribute("data-index");
     const selectedIndices = selectedLetters.map((letter) =>
@@ -105,20 +100,26 @@ document.addEventListener("drop", (e) => {
 
     // Заменяем символы в массиве
     selectedIndices.forEach((selectedIndex, index) => {
-      // Обмениваем тексты между символами
-      const tempText = overlappingLetter.textContent;
-      overlappingLetter.textContent = selectedLetters[index].textContent;
-      selectedLetters[index].textContent = tempText;
+      if (selectedIndex !== overlappingIndex) {
+        // Обмениваем тексты между символами
+        const tempText = overlappingLetter.textContent;
+        overlappingLetter.textContent = selectedLetters[index].textContent;
+        selectedLetters[index].textContent = tempText;
 
-      // Обновляем атрибуты data-index
-      const tempIndex = overlappingLetter.getAttribute("data-index");
-      overlappingLetter.setAttribute("data-index", selectedIndex);
-      selectedLetters[index].setAttribute("data-index", tempIndex);
+        // Обновляем атрибуты data-index
+        const tempIndex = overlappingLetter.getAttribute("data-index");
+        overlappingLetter.setAttribute("data-index", selectedIndex);
+        selectedLetters[index].setAttribute("data-index", tempIndex);
+      }
     });
   } else if (!isInsideOutputDiv) {
     // Если сброс вне outputDiv, добавляем буквы по координатам сброса
     letterArray.forEach((letter) => {
-      const letterElement = createLetterElement(letter);
+      const letterElement = document.createElement("span");
+      letterElement.textContent = letter;
+      letterElement.classList.add("letter");
+
+      // Размещаем элемент по координатам сброса
       letterElement.style.position = "absolute";
       letterElement.style.left = `${e.pageX}px`;
       letterElement.style.top = `${e.pageY}px`;
