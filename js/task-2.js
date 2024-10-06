@@ -17,8 +17,12 @@ document.addEventListener("keyup", (e) => {
 
 // Отображение текста
 document.getElementById("applyButton").addEventListener("click", () => {
-  const inputText = document.getElementById("textInput").value;
   const outputDiv = document.getElementById("output");
+
+  // Удаляем все буквы (span) с документа
+  document.querySelectorAll(".letter").forEach((letter) => letter.remove());
+
+  const inputText = document.getElementById("textInput").value;
   outputDiv.innerHTML = ""; // Очищаем перед добавлением новых букв
 
   inputText.split("").forEach((char, index) => {
@@ -83,55 +87,49 @@ document.addEventListener("dragover", (e) => {
 document.addEventListener("drop", (e) => {
   e.preventDefault();
 
-  // Получаем данные из dataTransfer
+  // Отримуємо дані з dataTransfer
   const letters = e.dataTransfer.getData("text/plain");
   const letterArray = JSON.parse(letters);
 
-  // Определяем целевую позицию для сброса
+  // Знаходимо інший символ у місці drop
   const overlappingLetter = document
     .elementsFromPoint(e.clientX, e.clientY)
     .find((el) => el.classList.contains("letter"));
 
-  // Проверяем, находится ли сброс внутри outputDiv
-  const outputDiv = document.getElementById("output");
-  const isInsideOutputDiv = outputDiv.contains(e.target);
-
-  if (overlappingLetter && isInsideOutputDiv) {
-    // Если есть буква в месте сброса
-    const overlappingIndex = overlappingLetter.getAttribute("data-index");
+  // Якщо є символ у місці drop
+  if (overlappingLetter) {
     const selectedIndices = selectedLetters.map((letter) =>
       letter.getAttribute("data-index")
     );
 
-    // Заменяем символы в массиве
+    // Міняємо текст та індекси
     selectedIndices.forEach((selectedIndex, index) => {
-      // Обмениваем тексты между символами
       const tempText = overlappingLetter.textContent;
       overlappingLetter.textContent = selectedLetters[index].textContent;
       selectedLetters[index].textContent = tempText;
 
-      // Обновляем атрибуты data-index
+      // Обновляємо data-index
       const tempIndex = overlappingLetter.getAttribute("data-index");
       overlappingLetter.setAttribute("data-index", selectedIndex);
       selectedLetters[index].setAttribute("data-index", tempIndex);
     });
-  } else if (!isInsideOutputDiv) {
-    // Если сброс вне outputDiv, добавляем буквы по координатам сброса
+  } else {
+    // Якщо drop не на іншому символі, просто переносимо символи в нове місце
     letterArray.forEach((letter) => {
       const letterElement = createLetterElement(letter);
       letterElement.style.position = "absolute";
       letterElement.style.left = `${e.pageX}px`;
       letterElement.style.top = `${e.pageY}px`;
 
-      // Добавляем букву на страницу
+      // Додаємо символ на сторінку
       document.body.appendChild(letterElement);
     });
 
-    // Удаляем выделенные буквы, если они не внутри outputDiv
+    // Видаляємо переміщені символи, якщо drop відбувається не на інший символ
     selectedLetters.forEach((letter) => letter.remove());
   }
 
-  clearSelection(); // Сбрасываем выделение после перемещения
+  clearSelection(); // Скидаємо виділення після переміщення
 });
 
 // Выделение рамкой
