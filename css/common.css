@@ -6,9 +6,9 @@ body {
   background-color: rgb(239, 235, 244);
 }
 
-/* .inputbox {
+.inputbox {
   padding: 20px;
-} */
+}
 .selection-box {
   position: absolute;
   border: 1px dashed #000;
@@ -45,10 +45,20 @@ body {
 }
 
 #textInput {
-  height: 40px; /* Збільшуємо висоту поля вводу */
+  height: 30px; /* Збільшуємо висоту поля вводу */
   font-size: 16px; /* Збільшуємо розмір шрифту для кращого вигляду */
   padding: 5px; /* Додаємо внутрішні відступи */
   border-radius: 5px;
+  background-color: rgb(239, 235, 244); /* Основний фон */
+  border: 0.5px solid rgb(112, 112, 191);
+}
+
+#textInput:focus {
+  border-color: aqua; /* Колір межі при фокусі */
+}
+
+#textInput:hover {
+  background-color: #e6f7ff; /* Інший фон при наведенні курсора */
 }
 
 #applyButton {
@@ -58,10 +68,11 @@ body {
   cursor: pointer; /* Змінюємо курсор при наведенні */
   border-radius: 5px;
 }
-/* 
-#dropArea {
-  margin-top: 20px;
-  padding: 10px;
-  border: 2px dashed #333;
-  min-height: 100px;
-} */
+
+#applyButton:hover {
+  color: aquamarine;
+}
+
+#applyButton:active {
+  color: crimson;
+}
