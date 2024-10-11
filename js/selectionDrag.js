@@ -3,66 +3,66 @@ import { state } from "./variables.js";
 // import { createLetterElement, clearSelection } from "./letters.js";
 
 // Выделение рамкой
-export function handleMouseDown(e) {
-  if (e.target.closest(".letter")) return;
-  state.isDragging = true;
-  state.startX = e.pageX;
-  state.startY = e.pageY;
-  const selectionBox = document.querySelector(".selection-box");
-  selectionBox.style.left = `${state.startX}px`;
-  selectionBox.style.top = `${state.startY}px`;
-  selectionBox.style.width = "0px";
-  selectionBox.style.height = "0px";
-  selectionBox.style.display = "block";
-}
+// export function handleMouseDown(e) {
+//   if (e.target.closest(".letter")) return;
+//   state.isDragging = true;
+//   state.startX = e.pageX;
+//   state.startY = e.pageY;
+//   const selectionBox = document.querySelector(".selection-box");
+//   selectionBox.style.left = `${state.startX}px`;
+//   selectionBox.style.top = `${state.startY}px`;
+//   selectionBox.style.width = "0px";
+//   selectionBox.style.height = "0px";
+//   selectionBox.style.display = "block";
+// }
 
-export function handleMouseMove(e) {
-  if (!state.isDragging) return;
+// export function handleMouseMove(e) {
+//   if (!state.isDragging) return;
 
-  const selectionBox = document.querySelector(".selection-box");
-  const { startX, startY } = state;
-  const currentX = e.pageX;
-  const currentY = e.pageY;
+//   const selectionBox = document.querySelector(".selection-box");
+//   const { startX, startY } = state;
+//   const currentX = e.pageX;
+//   const currentY = e.pageY;
 
-  const left = Math.min(startX, currentX);
-  const top = Math.min(startY, currentY);
-  const width = Math.abs(currentX - startX);
-  const height = Math.abs(currentY - startY);
+//   const left = Math.min(startX, currentX);
+//   const top = Math.min(startY, currentY);
+//   const width = Math.abs(currentX - startX);
+//   const height = Math.abs(currentY - startY);
 
-  selectionBox.style.left = `${left}px`;
-  selectionBox.style.top = `${top}px`;
-  selectionBox.style.width = `${width}px`;
-  selectionBox.style.height = `${height}px`;
+//   selectionBox.style.left = `${left}px`;
+//   selectionBox.style.top = `${top}px`;
+//   selectionBox.style.width = `${width}px`;
+//   selectionBox.style.height = `${height}px`;
 
-  const selectionRect = selectionBox.getBoundingClientRect();
-  const selectedLetters = state.selectedLetters;
+//   const selectionRect = selectionBox.getBoundingClientRect();
+//   const selectedLetters = state.selectedLetters;
 
-  document.querySelectorAll(".letter").forEach((letter) => {
-    const letterRect = letter.getBoundingClientRect();
-    const isInsideSelectionBox =
-      selectionRect.left < letterRect.right &&
-      selectionRect.right > letterRect.left &&
-      selectionRect.top < letterRect.bottom &&
-      selectionRect.bottom > letterRect.top;
+//   document.querySelectorAll(".letter").forEach((letter) => {
+//     const letterRect = letter.getBoundingClientRect();
+//     const isInsideSelectionBox =
+//       selectionRect.left < letterRect.right &&
+//       selectionRect.right > letterRect.left &&
+//       selectionRect.top < letterRect.bottom &&
+//       selectionRect.bottom > letterRect.top;
 
-    if (isInsideSelectionBox) {
-      letter.classList.add("selected");
-      if (!selectedLetters.includes(letter)) {
-        selectedLetters.push(letter);
-      }
-    } else {
-      letter.classList.remove("selected");
-      state.selectedLetters = selectedLetters.filter((el) => el !== letter);
-    }
-  });
-}
+//     if (isInsideSelectionBox) {
+//       letter.classList.add("selected");
+//       if (!selectedLetters.includes(letter)) {
+//         selectedLetters.push(letter);
+//       }
+//     } else {
+//       letter.classList.remove("selected");
+//       state.selectedLetters = selectedLetters.filter((el) => el !== letter);
+//     }
+//   });
+// }
 
-export function handleMouseUp() {
-  if (state.isDragging) {
-    state.isDragging = false;
-    document.querySelector(".selection-box").style.display = "none";
-  }
-}
+// export function handleMouseUp() {
+//   if (state.isDragging) {
+//     state.isDragging = false;
+//     document.querySelector(".selection-box").style.display = "none";
+//   }
+// }
 
 //===================== 2 =================================
 

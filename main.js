@@ -1,14 +1,17 @@
 import { createSelectionBox } from "./js/selectionBox.js"; // Импортируем функцию создания selectionBox
 import { handleDragOver } from "./js/dragAndDrop.js"; // Импортируем функцию обработки dragover
-import {
-  handleMouseDown,
-  handleMouseMove,
-  handleMouseUp,
-  // handleDrop,
-} from "./js/selectionDrag.js"; // Импортируем функции выделения и перетаскивания
+import // handleMouseDown,
+// handleMouseMove,
+// handleMouseMove,
+// handleMouseUp,
+// handleDrop,
+"./js/selectionDrag.js"; // Импортируем функции выделения и перетаскивания
 import { handleTextDisplay } from "./js/textDisplay.js"; // Импортируем функцию отображения текста
 import { handleKeyDown, handleKeyUp } from "./js/keyEvents.js"; // Импортируем обработку нажатий клавиш
 import { handleDrop } from "./js/handleDrop.js";
+import { handleMouseMove } from "./js/handleMouseMove.js";
+import { handleMouseDown } from "./js/handleMouseDown.js";
+import { handleMouseUp } from "./js/handleMouseUp.js";
 
 // Создаем и добавляем selectionBox
 createSelectionBox();
