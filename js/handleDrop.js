@@ -1,5 +1,3 @@
-// handleDrop.js
-
 import { state } from "./variables.js";
 import { createLetterElement } from "./letters.js";
 
