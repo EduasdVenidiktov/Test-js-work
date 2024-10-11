@@ -1,9 +1,11 @@
 import { state } from "./js/variables.js";
+import { createLetterElement } from "./js/letters.js";
 import {
-  createLetterElement,
-  // handleLetterClick,
-  clearSelection,
-} from "./js/letters.js"; // Импортируем функции
+  handleMouseDown,
+  handleMouseMove,
+  handleMouseUp,
+  handleDrop,
+} from "./js/selectionDrag.js"; // Импортируем новые функции
 
 const selectionBox = document.createElement("div");
 selectionBox.className = "selection-box";
@@ -40,108 +42,154 @@ document.addEventListener("dragover", (e) => {
   e.dataTransfer.dropEffect = "move"; // Меняем курсор на перемещение
 });
 
-document.addEventListener("drop", (e) => {
-  e.preventDefault();
-
-  // Отримуємо дані з dataTransfer
-  const letters = e.dataTransfer.getData("text/plain");
-  const letterArray = JSON.parse(letters);
-
-  // Знаходимо інший символ у місці drop
-  const overlappingLetter = document
-    .elementsFromPoint(e.clientX, e.clientY)
-    .find((el) => el.classList.contains("letter"));
-
-  // Якщо є символ у місці drop
-  if (overlappingLetter) {
-    const selectedIndices = state.selectedLetters.map((letter) =>
-      letter.getAttribute("data-index")
-    );
-
-    // Міняємо текст та індекси
-    selectedIndices.forEach((selectedIndex, index) => {
-      const tempText = overlappingLetter.textContent;
-      overlappingLetter.textContent = state.selectedLetters[index].textContent;
-      state.selectedLetters[index].textContent = tempText;
-
-      // Обновляємо data-index
-      const tempIndex = overlappingLetter.getAttribute("data-index");
-      overlappingLetter.setAttribute("data-index", selectedIndex);
-      state.selectedLetters[index].setAttribute("data-index", tempIndex);
-    });
-  } else {
-    // Якщо drop не на іншому символі, просто переносимо символи в нове місце
-    letterArray.forEach((letter) => {
-      const letterElement = createLetterElement(letter);
-      letterElement.style.position = "absolute";
-      letterElement.style.left = `${e.pageX}px`;
-      letterElement.style.top = `${e.pageY}px`;
-
-      // Додаємо символ на сторінку
-      document.body.appendChild(letterElement);
-    });
-
-    // Видаляємо переміщені символи, якщо drop відбувається не на інший символ
-    state.selectedLetters.forEach((letter) => letter.remove());
-  }
-
-  clearSelection(); // Скидаємо виділення після переміщення
-});
+document.addEventListener("drop", handleDrop);
 
 // Выделение рамкой
-document.addEventListener("mousedown", (e) => {
-  if (e.target.closest(".letter")) return;
-  state.isDragging = true;
-  state.startX = e.pageX;
-  state.startY = e.pageY;
-  selectionBox.style.left = `${state.startX}px`;
-  selectionBox.style.top = `${state.startY}px`;
-  selectionBox.style.width = "0px";
-  selectionBox.style.height = "0px";
-  selectionBox.style.display = "block";
-});
+document.addEventListener("mousedown", handleMouseDown);
+document.addEventListener("mousemove", handleMouseMove);
+document.addEventListener("mouseup", handleMouseUp);
 
-document.addEventListener("mousemove", (e) => {
-  if (!state.isDragging) return;
+//====================== 2 ============================================
+// import { state } from "./js/variables.js";
+// import { createLetterElement, clearSelection } from "./js/letters.js"; // Импортируем функции
 
-  const currentX = e.pageX;
-  const currentY = e.pageY;
+// const selectionBox = document.createElement("div");
+// selectionBox.className = "selection-box";
+// document.body.appendChild(selectionBox);
 
-  selectionBox.style.left = `${Math.min(state.startX, currentX)}px`;
-  selectionBox.style.top = `${Math.min(state.startY, currentY)}px`;
-  selectionBox.style.width = `${Math.abs(currentX - state.startX)}px`;
-  selectionBox.style.height = `${Math.abs(currentY - state.startY)}px`;
+// // Слушаем нажатие Ctrl
+// document.addEventListener("keydown", (e) => {
+//   if (e.key === "Control") state.isCtrlPressed = true;
+// });
 
-  const selectionRect = selectionBox.getBoundingClientRect();
+// document.addEventListener("keyup", (e) => {
+//   if (e.key === "Control") state.isCtrlPressed = false;
+// });
 
-  document.querySelectorAll(".letter").forEach((letter) => {
-    const letterRect = letter.getBoundingClientRect();
+// // Отображение текста
+// document.getElementById("applyButton").addEventListener("click", () => {
+//   const outputDiv = document.getElementById("output");
 
-    if (
-      selectionRect.left < letterRect.right &&
-      selectionRect.right > letterRect.left &&
-      selectionRect.top < letterRect.bottom &&
-      selectionRect.bottom > letterRect.top
-    ) {
-      letter.classList.add("selected");
-      if (!state.selectedLetters.includes(letter))
-        state.selectedLetters.push(letter);
-    } else {
-      letter.classList.remove("selected");
-      state.selectedLetters = state.selectedLetters.filter(
-        (el) => el !== letter
-      );
-    }
-  });
-});
+//   // Удаляем все буквы (span) с документа
+//   document.querySelectorAll(".letter").forEach((letter) => letter.remove());
 
-document.addEventListener("mouseup", () => {
-  if (state.isDragging) {
-    state.isDragging = false;
-    selectionBox.style.display = "none";
-  }
-});
+//   const inputText = document.getElementById("textInput").value;
+//   outputDiv.innerHTML = ""; // Очищаем перед добавлением новых букв
 
+//   inputText.split("").forEach((char, index) => {
+//     const letterElement = createLetterElement(char, index);
+//     outputDiv.appendChild(letterElement);
+//   });
+// });
+
+// // Общая логика для сброса на любое место на экране
+// document.addEventListener("dragover", (e) => {
+//   e.preventDefault();
+//   e.dataTransfer.dropEffect = "move"; // Меняем курсор на перемещение
+// });
+
+// document.addEventListener("drop", (e) => {
+//   e.preventDefault();
+
+//   // Отримуємо дані з dataTransfer
+//   const letters = e.dataTransfer.getData("text/plain");
+//   const letterArray = JSON.parse(letters);
+
+//   // Знаходимо інший символ у місці drop
+//   const overlappingLetter = document
+//     .elementsFromPoint(e.clientX, e.clientY)
+//     .find((el) => el.classList.contains("letter"));
+
+//   // Якщо є символ у місці drop
+//   if (overlappingLetter) {
+//     const selectedIndices = state.selectedLetters.map((letter) =>
+//       letter.getAttribute("data-index")
+//     );
+
+//     // Міняємо текст та індекси
+//     selectedIndices.forEach((selectedIndex, index) => {
+//       const tempText = overlappingLetter.textContent;
+//       overlappingLetter.textContent = state.selectedLetters[index].textContent;
+//       state.selectedLetters[index].textContent = tempText;
+
+//       // Обновляємо data-index
+//       const tempIndex = overlappingLetter.getAttribute("data-index");
+//       overlappingLetter.setAttribute("data-index", selectedIndex);
+//       state.selectedLetters[index].setAttribute("data-index", tempIndex);
+//     });
+//   } else {
+//     // Якщо drop не на іншому символі, просто переносимо символи в нове місце
+//     letterArray.forEach((letter) => {
+//       const letterElement = createLetterElement(letter);
+//       letterElement.style.position = "absolute";
+//       letterElement.style.left = `${e.pageX}px`;
+//       letterElement.style.top = `${e.pageY}px`;
+
+//       // Додаємо символ на сторінку
+//       document.body.appendChild(letterElement);
+//     });
+
+//     // Видаляємо переміщені символи, якщо drop відбувається не на інший символ
+//     state.selectedLetters.forEach((letter) => letter.remove());
+//   }
+
+//   clearSelection(); // Скидаємо виділення після переміщення
+// });
+
+// // Выделение рамкой
+// document.addEventListener("mousedown", (e) => {
+//   if (e.target.closest(".letter")) return;
+//   state.isDragging = true;
+//   state.startX = e.pageX;
+//   state.startY = e.pageY;
+//   selectionBox.style.left = `${state.startX}px`;
+//   selectionBox.style.top = `${state.startY}px`;
+//   selectionBox.style.width = "0px";
+//   selectionBox.style.height = "0px";
+//   selectionBox.style.display = "block";
+// });
+
+// document.addEventListener("mousemove", (e) => {
+//   if (!state.isDragging) return;
+
+//   const currentX = e.pageX;
+//   const currentY = e.pageY;
+
+//   selectionBox.style.left = `${Math.min(state.startX, currentX)}px`;
+//   selectionBox.style.top = `${Math.min(state.startY, currentY)}px`;
+//   selectionBox.style.width = `${Math.abs(currentX - state.startX)}px`;
+//   selectionBox.style.height = `${Math.abs(currentY - state.startY)}px`;
+
+//   const selectionRect = selectionBox.getBoundingClientRect();
+
+//   document.querySelectorAll(".letter").forEach((letter) => {
+//     const letterRect = letter.getBoundingClientRect();
+
+//     if (
+//       selectionRect.left < letterRect.right &&
+//       selectionRect.right > letterRect.left &&
+//       selectionRect.top < letterRect.bottom &&
+//       selectionRect.bottom > letterRect.top
+//     ) {
+//       letter.classList.add("selected");
+//       if (!state.selectedLetters.includes(letter))
+//         state.selectedLetters.push(letter);
+//     } else {
+//       letter.classList.remove("selected");
+//       state.selectedLetters = state.selectedLetters.filter(
+//         (el) => el !== letter
+//       );
+//     }
+//   });
+// });
+
+// document.addEventListener("mouseup", () => {
+//   if (state.isDragging) {
+//     state.isDragging = false;
+//     selectionBox.style.display = "none";
+//   }
+// });
+//============ 1 =============================================================================
 // import { state } from "./js/variables.js";
 
 // const selectionBox = document.createElement("div");
