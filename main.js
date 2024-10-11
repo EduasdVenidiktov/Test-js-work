@@ -1,46 +1,29 @@
-import { state } from "./js/variables.js";
-import { createLetterElement } from "./js/letters.js";
+import { createSelectionBox } from "./js/selectionBox.js"; // Импортируем функцию создания selectionBox
+import { handleDragOver } from "./js/dragAndDrop.js"; // Импортируем функцию обработки dragover
 import {
   handleMouseDown,
   handleMouseMove,
   handleMouseUp,
-  handleDrop,
-} from "./js/selectionDrag.js"; // Импортируем новые функции
+  // handleDrop,
+} from "./js/selectionDrag.js"; // Импортируем функции выделения и перетаскивания
+import { handleTextDisplay } from "./js/textDisplay.js"; // Импортируем функцию отображения текста
+import { handleKeyDown, handleKeyUp } from "./js/keyEvents.js"; // Импортируем обработку нажатий клавиш
+import { handleDrop } from "./js/handleDrop.js";
 
-const selectionBox = document.createElement("div");
-selectionBox.className = "selection-box";
-document.body.appendChild(selectionBox);
+// Создаем и добавляем selectionBox
+createSelectionBox();
 
 // Слушаем нажатие Ctrl
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Control") state.isCtrlPressed = true;
-});
-
-document.addEventListener("keyup", (e) => {
-  if (e.key === "Control") state.isCtrlPressed = false;
-});
+document.addEventListener("keydown", handleKeyDown);
+document.addEventListener("keyup", handleKeyUp);
 
 // Отображение текста
-document.getElementById("applyButton").addEventListener("click", () => {
-  const outputDiv = document.getElementById("output");
-
-  // Удаляем все буквы (span) с документа
-  document.querySelectorAll(".letter").forEach((letter) => letter.remove());
-
-  const inputText = document.getElementById("textInput").value;
-  outputDiv.innerHTML = ""; // Очищаем перед добавлением новых букв
-
-  inputText.split("").forEach((char, index) => {
-    const letterElement = createLetterElement(char, index);
-    outputDiv.appendChild(letterElement);
-  });
-});
+document
+  .getElementById("applyButton")
+  .addEventListener("click", handleTextDisplay);
 
 // Общая логика для сброса на любое место на экране
-document.addEventListener("dragover", (e) => {
-  e.preventDefault();
-  e.dataTransfer.dropEffect = "move"; // Меняем курсор на перемещение
-});
+document.addEventListener("dragover", handleDragOver);
 
 document.addEventListener("drop", handleDrop);
 
@@ -48,6 +31,96 @@ document.addEventListener("drop", handleDrop);
 document.addEventListener("mousedown", handleMouseDown);
 document.addEventListener("mousemove", handleMouseMove);
 document.addEventListener("mouseup", handleMouseUp);
+
+//====================== 4 =================================
+
+// import {
+//   handleMouseDown,
+//   handleMouseMove,
+//   handleMouseUp,
+//   handleDrop,
+// } from "./js/selectionDrag.js"; // Импортируем функции выделения и перетаскивания
+// import { handleTextDisplay } from "./js/textDisplay.js"; // Импортируем функцию отображения текста
+// import { handleKeyDown, handleKeyUp } from "./js/keyEvents.js"; // Импортируем обработку нажатий клавиш
+
+// const selectionBox = document.createElement("div");
+// selectionBox.className = "selection-box";
+// document.body.appendChild(selectionBox);
+
+// // Слушаем нажатие Ctrl
+// document.addEventListener("keydown", handleKeyDown);
+// document.addEventListener("keyup", handleKeyUp);
+
+// // Отображение текста
+// document
+//   .getElementById("applyButton")
+//   .addEventListener("click", handleTextDisplay);
+
+// // Общая логика для сброса на любое место на экране
+// document.addEventListener("dragover", (e) => {
+//   e.preventDefault();
+//   e.dataTransfer.dropEffect = "move"; // Меняем курсор на перемещение
+// });
+
+// document.addEventListener("drop", handleDrop);
+
+// // Выделение рамкой
+// document.addEventListener("mousedown", handleMouseDown);
+// document.addEventListener("mousemove", handleMouseMove);
+// document.addEventListener("mouseup", handleMouseUp);
+
+//================ 3 ===========================================
+
+// import { state } from "./js/variables.js";
+// import { createLetterElement } from "./js/letters.js";
+// import {
+//   handleMouseDown,
+//   handleMouseMove,
+//   handleMouseUp,
+//   handleDrop,
+// } from "./js/selectionDrag.js"; // Импортируем новые функции
+
+// const selectionBox = document.createElement("div");
+// selectionBox.className = "selection-box";
+// document.body.appendChild(selectionBox);
+
+// // Слушаем нажатие Ctrl
+// document.addEventListener("keydown", (e) => {
+//   if (e.key === "Control") state.isCtrlPressed = true;
+// });
+
+// document.addEventListener("keyup", (e) => {
+//   if (e.key === "Control") state.isCtrlPressed = false;
+// });
+
+// // Отображение текста
+// document.getElementById("applyButton").addEventListener("click", () => {
+//   const outputDiv = document.getElementById("output");
+
+//   // Удаляем все буквы (span) с документа
+//   document.querySelectorAll(".letter").forEach((letter) => letter.remove());
+
+//   const inputText = document.getElementById("textInput").value;
+//   outputDiv.innerHTML = ""; // Очищаем перед добавлением новых букв
+
+//   inputText.split("").forEach((char, index) => {
+//     const letterElement = createLetterElement(char, index);
+//     outputDiv.appendChild(letterElement);
+//   });
+// });
+
+// // Общая логика для сброса на любое место на экране
+// document.addEventListener("dragover", (e) => {
+//   e.preventDefault();
+//   e.dataTransfer.dropEffect = "move"; // Меняем курсор на перемещение
+// });
+
+// document.addEventListener("drop", handleDrop);
+
+// // Выделение рамкой
+// document.addEventListener("mousedown", handleMouseDown);
+// document.addEventListener("mousemove", handleMouseMove);
+// document.addEventListener("mouseup", handleMouseUp);
 
 //====================== 2 ============================================
 // import { state } from "./js/variables.js";
