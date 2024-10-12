@@ -1,15 +1,40 @@
 body {
-  margin: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center; /* Центруємо по вертикалі */
-  height: 40vh; /* Робимо контейнер на всю висоту екрану */
+
   background-color: rgb(239, 235, 244);
 }
 
+.container {
+  margin: 0 auto;
+  padding-top: 60px;
+  padding-bottom: 12px;
+}
+.menuList {
+  list-style-type: none; /* Убирает стандартные маркеры списка */
+  padding-bottom: 12px;
+  margin: 0; /* Убирает внешние отступы */
+}
+
+.menuList li {
+  text-align: left; /* Выравнивание текста по левому краю */
+}
+
+.menuList p {
+  text-align: left; /* Выравнивание текста в p по левому краю */
+  padding-bottom: 20px;
+}
+.menuList a {
+  text-decoration: none; /* Убирает подчеркивание с ссылок */
+  color: rgb(37, 24, 138); /* Изменение цвета текста на синий при наведении */
+}
+
+.menuList a:hover {
+  color: rgb(205, 32, 38); /* Цвет текста ссылок */
+}
+
 .inputbox {
-  padding: 20px;
+  padding-bottom: 20px;
 }
 
 .selection-box {
@@ -21,12 +46,13 @@ body {
 
 .letter {
   display: inline-block;
-  padding: 5px;
+  padding: 6px;
   border: 1px solid #a994f4;
   margin: 2px;
   cursor: pointer;
   user-select: none;
   border-radius: 5px;
+  background-color: #b4dff9;
   color: #130645;
 }
 
@@ -43,13 +69,6 @@ body {
 .letter.selected {
   border: 1px solid red;
   color: azure;
-}
-
-#output {
-  margin-top: 20px;
-  border: none;
-  min-height: 50px;
-  padding: 10px;
 }
 
 #textInput {
@@ -78,13 +97,15 @@ body {
 }
 
 #applyButton {
-  background-color: rgb(89, 89, 181);
+  background-color: rgb(57, 57, 198);
   height: 40px;
   font-size: 16px;
   cursor: pointer;
   border-radius: 5px;
   border: none;
-  color: #bbb6d4;
+  color: #cfcae7;
+  align-items: center;
+  justify-content: center;
 }
 
 #applyButton:hover {
@@ -93,4 +114,11 @@ body {
 
 #applyButton:active {
   color: crimson;
+}
+
+#output {
+  margin: 0 auto;
+  border: none;
+  min-height: 50px;
+  padding: 10px;
 }
