@@ -7,6 +7,8 @@ import { handleMouseMove } from "./js/handleMouseMove.js";
 import { handleMouseDown } from "./js/handleMouseDown.js";
 import { handleMouseUp } from "./js/handleMouseUp.js";
 
+import { showErrorNotification } from "./js/toastr-notifications.js";
+
 // Создаем и добавляем selectionBox
 createSelectionBox();
 
@@ -15,9 +17,20 @@ document.addEventListener("keydown", handleKeyDown);
 document.addEventListener("keyup", handleKeyUp);
 
 // Отображение текста
-document
-  .getElementById("applyButton")
-  .addEventListener("click", handleTextDisplay);
+// document
+//   .getElementById("applyButton")
+//   .addEventListener("click", handleTextDisplay);
+//================= 2 =================================================
+document.getElementById("applyButton").addEventListener("click", function () {
+  const inputField = document.getElementById("textInput");
+  const inputValue = inputField.value.trim(); // Отримуємо значення поля і видаляємо зайві пробіли
+
+  if (!inputValue) {
+    showErrorNotification("Please enter some text!"); // Виводимо спливаюче повідомлення
+  } else {
+    handleTextDisplay(); // Викликаємо існуючу функцію для обробки введеного тексту
+  }
+});
 
 // Общая логика для сброса на любое место на экране
 document.addEventListener("dragover", handleDragOver);
