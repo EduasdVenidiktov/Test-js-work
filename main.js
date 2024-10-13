@@ -7,7 +7,7 @@ import { handleMouseMove } from "./js/handleMouseMove.js";
 import { handleMouseDown } from "./js/handleMouseDown.js";
 import { handleMouseUp } from "./js/handleMouseUp.js";
 
-// import { showErrorNotification } from "./js/toastr-notifications.js";
+import { showErrorNotification } from "./js/toastr-notifications.js";
 
 // Создаем и добавляем selectionBox
 createSelectionBox();
@@ -33,7 +33,7 @@ document.getElementById("applyButton").addEventListener("click", function () {
   // });
 
   if (!inputValue) {
-    alert("Please enter some text!"); // Виводимо спливаюче повідомлення
+    showErrorNotification("Please enter some text!"); // Виводимо спливаюче повідомлення
   } else {
     handleTextDisplay(); // Викликаємо існуючу функцію для обробки введеного тексту
   }
