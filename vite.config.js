@@ -12,7 +12,7 @@
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  base: "./", // Путь к твоему репозиторию
+  base: "/Test-js-work/", // Путь к твоему репозиторию
   resolve: {
     alias: {
       toastr: "toastr/build/toastr.min.js",
