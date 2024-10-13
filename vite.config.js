@@ -18,4 +18,7 @@ export default defineConfig({
       toastr: "toastr/build/toastr.min.js",
     },
   },
+  optimizeDeps: {
+    include: ["toastr/build/toastr.min.css", "toastr"],
+  },
 });
