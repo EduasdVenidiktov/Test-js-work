@@ -26,7 +26,7 @@ document.getElementById("applyButton").addEventListener("click", function () {
   const inputValue = inputField.value.trim(); // Отримуємо значення поля і видаляємо зайві пробіли
 
   //   if (!inputValue) {
-  //     showErrorNotification("Please enter some text!"); // Виводимо спливаюче повідомлення
+  //     alert("Please enter some text!"); // Виводимо спливаюче повідомлення
   //   } else {
   //     handleTextDisplay(); // Викликаємо існуючу функцію для обробки введеного тексту
   //   }
