@@ -1,5 +1,5 @@
 import toastr from "toastr";
-import "toastr/build/toastr.min.css";
+import "../node_modules/toastr/build/toastr.min.css";
 
 export function showErrorNotification(message) {
   toastr.options = {
