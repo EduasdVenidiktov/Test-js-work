@@ -3,7 +3,7 @@ import "toastr/build/toastr.min.css";
 
 export function showErrorNotification(message) {
   toastr.options = {
-    positionClass: "toast-top-center", // Уведомления будут отображаться по центру вверху
+    positionClass: "toast-top-center",
     closeButton: true, // Кнопка закрытия
     debug: false,
     newestOnTop: false,
