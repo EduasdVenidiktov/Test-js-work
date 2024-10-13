@@ -1,5 +1,6 @@
 import toastr from "toastr"; // Корректный импорт
-import "../node_modules/toastr/build/toastr.min.css"; // Импорт CSS для toastr
+import "../node_modules/toastr/build/toastr.min.css";
+import "../node_modules/toastr/build/toastr.min.js";
 
 export function showErrorNotification(message) {
   toastr.options = {
