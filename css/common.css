@@ -122,3 +122,17 @@ body {
   min-height: 50px;
   padding: 10px;
 }
+
+.notyf .notyf__toast--error {
+  background-color: indianred !important; /* Красный фон для ошибки */
+  color: white !important; /* Белый текст */
+  font-size: 16px !important; /* Размер шрифта */
+  border-radius: 8px !important; /* Закругленные углы */
+  padding: 12px 20px !important; /* Отступы */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Тень */
+}
+
+.notyf .notyf__icon {
+  font-size: 24px !important;
+  color: white !important; /* Белый цвет иконки */
+}

@@ -16,6 +16,7 @@ export default defineConfig({
   resolve: {
     alias: {
       toastr: "toastr/build/toastr.min.js",
+      "@": "/src",
     },
   },
   optimizeDeps: {
