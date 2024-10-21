@@ -17,38 +17,51 @@ document.addEventListener("keyup", (e) => {
 
 // Отображение текста
 document.getElementById("applyButton").addEventListener("click", () => {
-  const inputText = document.getElementById("textInput").value;
   const outputDiv = document.getElementById("output");
-  outputDiv.innerHTML = ""; // Очищаем перед добавлением новых букв
 
-  inputText.split("").forEach((char, index) => {
-    const letterElement = document.createElement("span");
-    letterElement.textContent = char;
-    letterElement.classList.add("letter");
-    letterElement.setAttribute("data-index", index);
+  // Удаляем все буквы (span) с документа
+  document.querySelectorAll(".letter").forEach((letter) => letter.remove());
 
-    letterElement.addEventListener("click", () =>
-      handleLetterClick(letterElement)
-    );
+  const inputText = document.getElementById("textInput").value;
+  if (!inputText) {
+    alert("Please enter some text!"); // Виводимо спливаюче повідомлення
+  } else {
+    outputDiv.innerHTML = ""; // Очищаем перед добавлением новых букв
 
-    letterElement.setAttribute("draggable", "true");
-    letterElement.addEventListener("dragstart", (e) => {
-      // Если элемент не выделен, выбираем его
-      if (!selectedLetters.includes(letterElement)) {
-        handleLetterClick(letterElement);
-      }
-
-      // Устанавливаем данные для перетаскивания
-      e.dataTransfer.setData(
-        "text/plain",
-        JSON.stringify(selectedLetters.map((letter) => letter.textContent))
-      );
-      e.dataTransfer.effectAllowed = "move";
+    inputText.split("").forEach((char, index) => {
+      const letterElement = createLetterElement(char, index);
+      outputDiv.appendChild(letterElement);
     });
-
-    outputDiv.appendChild(letterElement);
-  });
+  }
 });
+
+function createLetterElement(char, index) {
+  const letterElement = document.createElement("span");
+  letterElement.textContent = char;
+  letterElement.classList.add("letter");
+  letterElement.setAttribute("data-index", index);
+  letterElement.setAttribute("draggable", "true");
+
+  letterElement.addEventListener("click", () =>
+    handleLetterClick(letterElement)
+  );
+
+  letterElement.addEventListener("dragstart", (e) => {
+    // Если элемент не выделен, выбираем его
+    if (!selectedLetters.includes(letterElement)) {
+      handleLetterClick(letterElement);
+    }
+
+    // Устанавливаем данные для перетаскивания
+    e.dataTransfer.setData(
+      "text/plain",
+      JSON.stringify(selectedLetters.map((letter) => letter.textContent))
+    );
+    e.dataTransfer.effectAllowed = "move";
+  });
+
+  return letterElement;
+}
 
 function handleLetterClick(letterElement) {
   if (letterElement.classList.contains("selected")) {
@@ -78,61 +91,49 @@ document.addEventListener("dragover", (e) => {
 document.addEventListener("drop", (e) => {
   e.preventDefault();
 
-  // Получаем данные из dataTransfer
+  // Отримуємо дані з dataTransfer
   const letters = e.dataTransfer.getData("text/plain");
   const letterArray = JSON.parse(letters);
 
-  // Определяем целевую позицию для сброса
+  // Знаходимо інший символ у місці drop
   const overlappingLetter = document
     .elementsFromPoint(e.clientX, e.clientY)
     .find((el) => el.classList.contains("letter"));
 
-  // Проверяем, находится ли сброс внутри outputDiv
-  const outputDiv = document.getElementById("output");
-  const isInsideOutputDiv = outputDiv.contains(e.target);
-
+  // Якщо є символ у місці drop
   if (overlappingLetter) {
-    // Если есть буква в месте сброса
-    const overlappingIndex = overlappingLetter.getAttribute("data-index");
     const selectedIndices = selectedLetters.map((letter) =>
       letter.getAttribute("data-index")
     );
 
-    // Заменяем символы в массиве
+    // Міняємо текст та індекси
     selectedIndices.forEach((selectedIndex, index) => {
-      if (selectedIndex !== overlappingIndex) {
-        // Обмениваем тексты между символами
-        const tempText = overlappingLetter.textContent;
-        overlappingLetter.textContent = selectedLetters[index].textContent;
-        selectedLetters[index].textContent = tempText;
+      const tempText = overlappingLetter.textContent;
+      overlappingLetter.textContent = selectedLetters[index].textContent;
+      selectedLetters[index].textContent = tempText;
 
-        // Обновляем атрибуты data-index
-        const tempIndex = overlappingLetter.getAttribute("data-index");
-        overlappingLetter.setAttribute("data-index", selectedIndex);
-        selectedLetters[index].setAttribute("data-index", tempIndex);
-      }
+      // Обновляємо data-index
+      const tempIndex = overlappingLetter.getAttribute("data-index");
+      overlappingLetter.setAttribute("data-index", selectedIndex);
+      selectedLetters[index].setAttribute("data-index", tempIndex);
     });
-  } else if (!isInsideOutputDiv) {
-    // Если сброс вне outputDiv, добавляем буквы по координатам сброса
+  } else {
+    // Якщо drop не на іншому символі, просто переносимо символи в нове місце
     letterArray.forEach((letter) => {
-      const letterElement = document.createElement("span");
-      letterElement.textContent = letter;
-      letterElement.classList.add("letter");
-
-      // Размещаем элемент по координатам сброса
+      const letterElement = createLetterElement(letter);
       letterElement.style.position = "absolute";
       letterElement.style.left = `${e.pageX}px`;
       letterElement.style.top = `${e.pageY}px`;
 
-      // Добавляем букву на страницу
+      // Додаємо символ на сторінку
       document.body.appendChild(letterElement);
     });
 
-    // Удаляем выделенные буквы, если они не внутри outputDiv
+    // Видаляємо переміщені символи, якщо drop відбувається не на інший символ
     selectedLetters.forEach((letter) => letter.remove());
   }
 
-  clearSelection(); // Сбрасываем выделение после перемещения
+  clearSelection(); // Скидаємо виділення після переміщення
 });
 
 // Выделение рамкой
