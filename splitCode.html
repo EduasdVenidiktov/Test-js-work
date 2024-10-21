@@ -4,21 +4,22 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MAIN</title>
+    <title>splitCode</title>
     <link rel="stylesheet" href="css/common.css" />
   </head>
   <body>
-    <p><a href="index.html">Go back</a></p>
-
-    <input type="text" id="textInput" placeholder="Enter text here" />
-    <button id="applyButton">Apply</button>
+    <section class="container">
+      <p class="menuList"><a href="./index.html">Go back</a></p>
+      <div class="inputBox">
+        <input type="text" id="textInput" placeholder="Enter text here" />
+        <button id="applyButton">Apply</button>
+      </div>
+    </section>
 
     <div id="output"></div>
-    <div id="dropArea">Drop here</div>
 
-    <!-- Додано selection box -->
     <div id="selectionBox" class="selection-box"></div>
 
-    <script src="./js/main.js" type="module"></script>
+    <script src="./main.js" type="module"></script>
   </body>
 </html>
