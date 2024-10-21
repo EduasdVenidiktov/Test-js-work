@@ -66,11 +66,8 @@ export function handleDrop(e) {
 
       document.body.appendChild(letterElement);
     });
-
-    // Видаляємо старі елементи
     state.selectedLetters.forEach((letter) => letter.remove());
   }
-
   clearSelection(); // Скидаємо виділення після переміщення
 }
 

@@ -32,9 +32,9 @@ function createAndPlaceLetters(letterArray, e) {
   // Удаление перемещенных символов
   state.selectedLetters.forEach((letter) => letter.remove());
 }
-
 export function handleDrop(e) {
   e.preventDefault();
+
   const letters = e.dataTransfer.getData("text/plain");
   const letterArray = JSON.parse(letters);
 
@@ -42,8 +42,17 @@ export function handleDrop(e) {
     .elementsFromPoint(e.clientX, e.clientY)
     .find((el) => el.classList.contains("letter"));
 
+  // Получаем элемент outputDiv
+  const outputDiv = document.getElementById("output");
+
+  // Проверяем, произошло ли событие drop вне outputDiv
+  const dropOutsideOutputDiv = !outputDiv.contains(e.target);
+
   if (overlappingLetter) {
     swapLettersContentAndIndices(overlappingLetter);
+  } else if (dropOutsideOutputDiv) {
+    // Если drop вне поля outputDiv, удаляем выделенные символы
+    state.selectedLetters.forEach((letter) => letter.remove());
   } else {
     createAndPlaceLetters(letterArray, e);
   }
